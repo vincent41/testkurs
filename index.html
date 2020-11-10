@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+      <div id="app">
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="#">Glock</a>
+      </nav>
+      <div class="container-fluid">
+          <div class="row pt-4">
+              <div class="col-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Kurs Prognose</h5>
+                <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col">Datum</th>
+                            <th scope="col" data-toggle="tooltip" data-placement="bottom" title="WIR KAUFEN zu diesem Preis">Einkauf</th>
+                            <th scope="col"><span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="WIR VERKAUFEN zu diesem Preis">Verkauf</span></th>
+                            <th scope="col">Aktion</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                    <tr :class="{'text-danger': date == kurs.date}" v-for="kurs in kurses" >
+                        <td>
+                              {{ kurs.date }}
+                        </td>
+                        <td>
+                              {{ kurs.ek }}
+                        </td>
+                        <td>
+                              {{ kurs.vk }}
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm" :class="{'btn-danger': date == kurs.date, 'btn-outline-dark': date != kurs.date}" @click="date = kurs.date">Kurs wählen</button>
+                        </td>
+                    </tr>
+                </tbody>
+                </table>
+
+            </div>
+            </div>
+              </div>
+              
+              <div class="col-7">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Kunden </h5> 
+                        <div v-if="newMemberFlag">
+                          <div class="row mb-3">
+                              <div class="col">
+                                <input type="text" class="form-control form-control-sm" placeholder="Name" v-model="newMember.name">
+                              </div>
+                              <div class="col">
+                                <button class="btn btn-outline-dark btn-sm" @click="addMember">{{newMember.name}} anlegen</button>
+                              </div>
+                            </div>
+                        </div>
+                        <table class="table table-striped">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Name</th>
+                              <th scope="col">Glock</th>
+                              <th scope="col">Wert</th>
+                              <th scope="col">Geld</th>
+                              <th scope="col">Aktion</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr v-for="m in members">
+                              <th scope="row">{{m.id}}</th>
+                              <td>{{m.name}}</td>
+                              <td>{{m.glock}} G</td>
+                              <td>{{Number.parseFloat(m.glock * currentKurs.ek).toFixed(2)}} €</td>
+                              <td>{{m.geld}}</td>
+                              <td> 
+                                  <div class="input-group">
+                                      <input class="form-control" type="number" v-model="m.betrag">
+                                      <div class="input-group-append">
+                                        <span class="input-group-text mr-3">G</span> 
+                                        <button class="btn btn-success btn-sm" @click="buy(m.id, m.betrag)"> {{Number.parseFloat(m.betrag * currentKurs.vk).toFixed(2)}} € Kaufen</button>
+                                  <button class="btn btn-outline-dark btn-sm" v-if="m.betrag <= m.glock" @click="sell(m.id, m.betrag)">{{Number.parseFloat(m.betrag * currentKurs.ek).toFixed(2)}} € Verkaufen</button>
+                                      </div>
+                                    </div>
+                              </td>
+                            </tr>
+                            </tbody>
+                            </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Aktuell</h5>
+                      <p class="card-text">Datum: {{date}}</p>
+                      <p class="card-text">Kasse: {{Number.parseFloat(kasse).toFixed(2)}} €</p>
+                      <p class="card-text">Glock im Umlauf: {{glockUmlauf}} G</p>
+                      <p class="card-text">Glock Rückkaufswert: {{Number.parseFloat(glockUmlauf * currentKurs.ek).toFixed(2)}} €</p>
+                      <a href="#" class="btn btn-primary">Bilanz</a>
+                    </div>
+                  </div>
+              </div>
+          </div>
+          <div class="row pt-4">
+              <div class="col">
+                  <div class="card">
+                      <div class="card-body">
+                          <h5 class="card-title">Kunden </h5> 
+                          <div v-if="newMemberFlag">
+                            <div class="row mb-3">
+                                <div class="col">
+                                  <input type="text" class="form-control form-control-sm" placeholder="Name" v-model="newMember.name">
+                                </div>
+                                <div class="col">
+                                  <button class="btn btn-outline-dark btn-sm" @click="addMember">{{newMember.name}} anlegen</button>
+                                </div>
+                              </div>
+                          </div>
+                          <table class="table table-striped">
+                            <thead>
+                              <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Glock</th>
+                                <th scope="col">Wert</th>
+                                <th scope="col">Geld</th>
+                                <th scope="col">Aktion</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr v-for="m in members">
+                                <th scope="row">{{m.id}}</th>
+                                <td>{{m.name}}</td>
+                                <td>{{m.glock}} G</td>
+                                <td>{{Number.parseFloat(m.glock * currentKurs.ek).toFixed(2)}} €</td>
+                                <td>{{m.geld}}</td>
+                                <td> 
+                                    <div class="input-group">
+                                        <input class="form-control" type="number" v-model="m.betrag">
+                                        <div class="input-group-append">
+                                          <span class="input-group-text mr-3">G</span> 
+                                          <button class="btn btn-success btn-sm" @click="buy(m.id, m.betrag)"> {{Number.parseFloat(m.betrag * currentKurs.vk).toFixed(2)}} € Kaufen</button>
+                                    <button class="btn btn-outline-dark btn-sm" v-if="m.betrag <= m.glock" @click="sell(m.id, m.betrag)">{{Number.parseFloat(m.betrag * currentKurs.ek).toFixed(2)}} € Verkaufen</button>
+                                        </div>
+                                      </div>
+                                </td>
+                              </tr>
+                              </tbody>
+                              </table>
+                      </div>
+                  </div>
+              </div>
+              
+          </div>
+      </div>
+    </div>
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+    <script src="./js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>
