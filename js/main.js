@@ -160,9 +160,7 @@ new Vue({
           ],
         kasse: 0,
         members: [
-            { id: 1, name: "Kunde 1", glock: 0, geld:100, betrag: 0 },
-            { id: 6, name: "Kunde 1", glock: 0, geld:100, betrag: 0 },
-            { id: 3, name: "Kunde 1", glock: 0, geld:100, betrag: 0 }
+            { id: 1, name: "Kunde 1", glock: 0, geld:0, betrag: 0 }
         ]
     },
     computed:{

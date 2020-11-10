@@ -114,57 +114,6 @@
                   </div>
               </div>
           </div>
-          <div class="row pt-4">
-              <div class="col">
-                  <div class="card">
-                      <div class="card-body">
-                          <h5 class="card-title">Kunden </h5> 
-                          <div v-if="newMemberFlag">
-                            <div class="row mb-3">
-                                <div class="col">
-                                  <input type="text" class="form-control form-control-sm" placeholder="Name" v-model="newMember.name">
-                                </div>
-                                <div class="col">
-                                  <button class="btn btn-outline-dark btn-sm" @click="addMember">{{newMember.name}} anlegen</button>
-                                </div>
-                              </div>
-                          </div>
-                          <table class="table table-striped">
-                            <thead>
-                              <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Glock</th>
-                                <th scope="col">Wert</th>
-                                <th scope="col">Geld</th>
-                                <th scope="col">Aktion</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr v-for="m in members">
-                                <th scope="row">{{m.id}}</th>
-                                <td>{{m.name}}</td>
-                                <td>{{m.glock}} G</td>
-                                <td>{{Number.parseFloat(m.glock * currentKurs.ek).toFixed(2)}} €</td>
-                                <td>{{m.geld}}</td>
-                                <td> 
-                                    <div class="input-group">
-                                        <input class="form-control" type="number" v-model="m.betrag">
-                                        <div class="input-group-append">
-                                          <span class="input-group-text mr-3">G</span> 
-                                          <button class="btn btn-success btn-sm" @click="buy(m.id, m.betrag)"> {{Number.parseFloat(m.betrag * currentKurs.vk).toFixed(2)}} € Kaufen</button>
-                                    <button class="btn btn-outline-dark btn-sm" v-if="m.betrag <= m.glock" @click="sell(m.id, m.betrag)">{{Number.parseFloat(m.betrag * currentKurs.ek).toFixed(2)}} € Verkaufen</button>
-                                        </div>
-                                      </div>
-                                </td>
-                              </tr>
-                              </tbody>
-                              </table>
-                      </div>
-                  </div>
-              </div>
-              
-          </div>
       </div>
     </div>
     
